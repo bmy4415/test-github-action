@@ -31,7 +31,7 @@ jobs:
       - name: Do black formatting
         shell: bash
         run: |
-          git checkout {{ github.head_ref }}  # checkout to pull-request source branch
+          git checkout ${{ github.head_ref }}  # checkout to pull-request source branch
           pip install black
           git config --global user.name 'bmy4415'
           git config --global user.email 'bmy4415@naver.com'
@@ -41,7 +41,7 @@ jobs:
           #git status
           # black .
           echo "NOW DO BLACK FORMATTING"
-          black $(git diff --name-only $(git merge-base --fork-point {{ github.base_ref }}) --diff-filter=d -- '*.py')
+          black $(git diff --name-only $(git merge-base --fork-point ${{ github.base_ref }}) --diff-filter=d -- '*.py')
           echo "BLACK FORMATTING IS DONE"
           # git log
           # echo "END OF GIT LOG"
