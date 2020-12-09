@@ -1,2 +1,2 @@
 # black prefers double quote (")
-print('hi')
+print("hi")
