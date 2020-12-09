@@ -1,8 +1,10 @@
 # Name of this action
 name: autoblack_pull_request
 
-# This action runs only when pull_request
-on: [pull_request]
+# This action runs only when pull_request to dev
+on:
+  pull_request:
+    branches: [dev]
 
 # Jobs which will be done on this action
 jobs:
@@ -23,7 +25,7 @@ jobs:
       # Install black
       - run: pip install black
       # Find modified files only and check if black is needed
-      - run: black --check $(git diff --name-only $(git merge-base --fork-point dev) --diff-filter=d)
+      - run: black --check $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d)
 
       #black --check .
       - name: If needed, commit black changes to the pull request
@@ -37,7 +39,7 @@ jobs:
           git branch
           git status
           # black .
-          black $(git diff --name-only $(git merge-base --fork-point dev) --diff-filter=d)
+          black $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d)
           git status
           echo DO NOT git checkout $GITHUB_HEAD_REF
           ## git checkout $GITHUB_HEAD_REF
