@@ -50,7 +50,7 @@ jobs:
           #echo ready to commit
           git commit -am "fixup! Format Python code with psf/black pull_request"
           #echo ready to push
-          # git push
+          git push
 
           # Originally, push is not feasible from pull request 
-          git push --force origin HEAD:$GITHUB_REF
+          # git push --force origin HEAD:$GITHUB_REF
