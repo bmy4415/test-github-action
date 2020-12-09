@@ -32,7 +32,6 @@ jobs:
         shell: bash
         if: failure()
         run: |
-          #printenv | grep GITHUB
           git config --global user.name 'bmy4415'
           git config --global user.email 'bmy4415@naver.com'          
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
@@ -40,7 +39,11 @@ jobs:
           #git branch
           #git status
           # black .
+          echo "NOW DO BLACK FORMATTING"
           black $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d -- '*.py')
+          echo "BLACK FORMATTING IS DONE"
+          git log
+          echo "END OF GIT LOG"
           git status
           #echo DO NOT git checkout $GITHUB_HEAD_REF
           ## git checkout $GITHUB_HEAD_REF
@@ -51,36 +54,3 @@ jobs:
 
           # Originally, push is not feasible from pull request 
           git push --force origin HEAD:$GITHUB_REF
-          # remote: Permission to cclauss/autoblack.git denied to github-actions[bot].
-          # fatal: unable to access 'https://github.com/cclauss/autoblack/': The requested URL returned error: 403
-          # https://github.com/cclauss/autoblack/pull/9
-          # https://github.com/elephantworks/autoblack/edit/patch-1/platform_info.py?pr=%2Fcclauss%2Fautoblack%2Fpull%2F9
-          # error: Your local changes to the following files would be overwritten by checkout:
-          # platform_info.py
-          # Please commit your changes or stash them before you switch branches.
-          # Aborting
-          # git checkout patch-1
-        #git remote -v || true
-        #git branch || true
-        #echo "A"
-        #git remote add locala ***github.com/${GITHUB_ACTOR}/autoblack || true
-        #echo "B"
-        #git remote add localb github.com/${GITHUB_ACTOR}/autoblack || true
-        #echo "C"
-        #git remote add localc git@github.com/${GITHUB_ACTOR}/autoblack.git || true
-        #echo "D"
-        #git remote add locald https://github.com/${GITHUB_ACTOR}/autoblack || true
-        #echo "E"
-        #git remote -v || true
-        #git branch || true
-        #echo "F"
-        ##git push locala || true
-        #git push locala HEAD:${GITHUB_REF:5} || true
-        #echo "G"
-        ##git push locald || true
-        #git push locald HEAD:${GITHUB_REF:5} || true
-        ## git push origin HEAD:${GITHUB_REF:5}
-        #echo "H"
-        ## git push
-        #git remote -v || true
-        #git branch || true
