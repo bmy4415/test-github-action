@@ -29,25 +29,28 @@ jobs:
 
       #black --check .
       - name: If needed, commit black changes to the pull request
+        shell: bash
         if: failure()
         run: |
-          printenv | grep GITHUB
+          #printenv | grep GITHUB
           git config --global user.name 'bmy4415'
           git config --global user.email 'bmy4415@naver.com'          
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git remote -v
-          git branch
-          git status
+          #git remote -v
+          #git branch
+          #git status
           # black .
           black $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d -- '*.py')
           git status
-          echo DO NOT git checkout $GITHUB_HEAD_REF
+          #echo DO NOT git checkout $GITHUB_HEAD_REF
           ## git checkout $GITHUB_HEAD_REF
-          echo ready to commit
+          #echo ready to commit
           git commit -am "fixup! Format Python code with psf/black pull_request"
-          echo ready to push
+          #echo ready to push
           # git push
-          git push origin HEAD:$GITHUB_REF
+
+          # Originally, push is not feasible from pull request 
+          git push --force origin HEAD:$GITHUB_REF
           # remote: Permission to cclauss/autoblack.git denied to github-actions[bot].
           # fatal: unable to access 'https://github.com/cclauss/autoblack/': The requested URL returned error: 403
           # https://github.com/cclauss/autoblack/pull/9
