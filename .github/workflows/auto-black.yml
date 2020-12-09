@@ -42,12 +42,16 @@ jobs:
           echo "NOW DO BLACK FORMATTING"
           black $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d -- '*.py')
           echo "BLACK FORMATTING IS DONE"
-          git log
-          echo "END OF GIT LOG"
+          # git log
+          # echo "END OF GIT LOG"
           git status
           #echo DO NOT git checkout $GITHUB_HEAD_REF
           ## git checkout $GITHUB_HEAD_REF
           #echo ready to commit
+          echo "$ git add ."
+          git add .
+
+          echo "do commit"
           git commit -am "fixup! Format Python code with psf/black pull_request"
           #echo ready to push
           git push
