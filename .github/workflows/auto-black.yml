@@ -17,30 +17,31 @@ jobs:
       # Fetch source cods from github repository
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0 # fetch all branches and all histories
+          fetch-depth: 0
       # Setup python environment
       - uses: actions/setup-python@v2
         with:
           python-version: 3.7.9
-      # Install black
-      - run: pip install black
-      # Find modified files only and check if black is needed
-      - run: black --check $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d -- '*.py')
+      # # Install black
+      # - run: pip install black
+      # # Find modified files only and check if black is needed
+      # - run: black --check $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d -- '*.py')
 
       #black --check .
-      - name: If needed, commit black changes to the pull request
+      - name: Do black formatting
         shell: bash
-        if: failure()
         run: |
+          git checkout {{ github.head_ref }}  # checkout to pull-request source branch
+          pip install black
           git config --global user.name 'bmy4415'
-          git config --global user.email 'bmy4415@naver.com'          
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git config --global user.email 'bmy4415@naver.com'
+          # git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           #git remote -v
           #git branch
           #git status
           # black .
           echo "NOW DO BLACK FORMATTING"
-          black $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d -- '*.py')
+          black $(git diff --name-only $(git merge-base --fork-point {{ github.base_ref }}) --diff-filter=d -- '*.py')
           echo "BLACK FORMATTING IS DONE"
           # git log
           # echo "END OF GIT LOG"
@@ -53,7 +54,8 @@ jobs:
 
           echo "do commit"
           git commit -am "fixup! Format Python code with psf/black pull_request"
-          #echo ready to push
+
+          echo "do push"
           git push
 
           # Originally, push is not feasible from pull request 
