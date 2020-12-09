@@ -25,7 +25,7 @@ jobs:
       # Install black
       - run: pip install black
       # Find modified files only and check if black is needed
-      - run: black --check $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d)
+      - run: black --check $(git diff --name-only $(git merge-base --fork-point origin/dev) --diff-filter=d -- '*.py')
 
       #black --check .
       - name: If needed, commit black changes to the pull request
